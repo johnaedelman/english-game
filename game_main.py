@@ -19,8 +19,19 @@ while True:  # Begin the main loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # Checks if the game window has been closed. If so, stops the program
             sys.exit()
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_w]:
+        real_pos[1] -= 1
+    if keys[pygame.K_s]:
+        real_pos[1] += 1
+    if keys[pygame.K_d]:
+        real_pos[0] += 1
+    if keys[pygame.K_a]:
+        real_pos[0] -= 1
+
     screen.blit(real, real_pos)
     pygame.display.update()
-    real_pos[0] += 1
+
     main_clock.tick(60)  # Locks the game to run at 60 FPS
 
