@@ -23,10 +23,8 @@ while True:  # Begin the main loop
             sys.exit()
 
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:  # Checks keypress for basic movement
-        quartz.vel[1] -= 1
-    if keys[pygame.K_s]:
-        quartz.vel[1] += 1
+    if keys[pygame.K_SPACE]:  # Checks keypress for basic movement
+        quartz.vel[1] = -15  # Note that this gets applied to his movement before it gets checked. Probably fix that
     if keys[pygame.K_d]:
         quartz.vel[0] += 1
     if keys[pygame.K_a]:
@@ -35,14 +33,12 @@ while True:  # Begin the main loop
     quartz.pos[0] += quartz.vel[0]
     quartz.pos[1] += quartz.vel[1]
 
-    # Gravity (not working properly with the velocity check/decay at the moment, should be fixed)
-    """
     if not quartz.pos[1] >= screen_size[1] - quartz.sprite.get_height():
         quartz.vel[1] += 0.5
     else:
         quartz.vel[1] = 0
         quartz.pos[1] = screen_size[1] - quartz.sprite.get_height()
-    """
+
     vel_check_decay(quartz)
 
     print(quartz.vel)
