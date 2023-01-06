@@ -50,6 +50,8 @@ while True:  # Begin the main loop
         quartz.vel[0] += 1
     if keys[pygame.K_a]:
         quartz.vel[0] -= 1
+    if keys[pygame.K_LALT] and keys[pygame.K_BACKSPACE]:
+        sys.exit()
 
     for i in range(15):  # Adds some markers every hundred pixels, just for scale
         screen.blit(marker, (i * 100, 0))
