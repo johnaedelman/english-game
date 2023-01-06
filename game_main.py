@@ -35,6 +35,8 @@ def get_floor(position):
     return offset, return_interval
 
 
+last_time = 0  # The number of elapsed milliseconds the last time this value was checked. Used for cooldowns. May need to create multiple, one for each cooldown
+
 while True:  # Begin the main loop
     screen.fill((0, 162, 232))
     terrain.set_colorkey((255, 255, 255))
@@ -43,9 +45,11 @@ while True:  # Begin the main loop
         if event.type == pygame.QUIT:  # Checks if the game window has been closed. If so, stops the program
             sys.exit()
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_SPACE]:  # Checks keypress for basic movement
-        quartz.vel[1] = -10
+    keys = pygame.key.get_pressed()  # Checks keypresses to determine velocity changes and such
+    if keys[pygame.K_SPACE]:
+        if pygame.time.get_ticks() - last_time >= 500 and quartz.pos[1] == screen_size[1] - get_floor(quartz.pos)[0] - quartz.sprite.get_height():  # Checks if the cooldown is up and if the player is touching the floor
+            quartz.vel[1] = -14
+            last_time = pygame.time.get_ticks()
     if keys[pygame.K_d]:
         quartz.vel[0] += 1
     if keys[pygame.K_a]:
