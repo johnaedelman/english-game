@@ -18,23 +18,10 @@ henry = pygame.image.load("assets/sprites/henry.png")
 quartz = pygame.image.load("assets/sprites/quartz.png")
 animation_cycle = [henry, henry, henry, henry, henry]
 player = Entity("player", animation=animation_cycle)
+enemy = Entity("arnold")
 
-floor = [
-    [0, 540, 200],  # Lower bound on x-axis, upper bound on x-axis, y-value to set as floor
-    [541, 1080, 400]
-]
-
-
-def get_floor(position):
-    offset = 0
-    return_interval = [0, 0, 0]
-    for interval in floor:
-        if (interval[1] >= position[0] >= interval[0]) or (interval[1] >= position[0] + player.sprite.get_width() >= interval[0]):  # The left and right edges of the sprite both have to be within the interval to avoid clipping
-            offset = interval[2]  # Potential bug here - multiple intervals can be a match to the same x-pos. Has not caused problems yet, but be aware of it
-            return_interval = interval
-    return offset, return_interval
-
-
+loaded_entities = [player, enemy]
+print(player.hitbox.width)
 last_time = 0  # The number of elapsed milliseconds the last time this value was checked. Used for cooldowns. May need to create multiple, one for each cooldown
 
 while True:  # Begin the main loop
@@ -47,7 +34,7 @@ while True:  # Begin the main loop
 
     keys = pygame.key.get_pressed()  # Checks keypresses to determine velocity changes and such
     if keys[pygame.K_SPACE]:
-        if pygame.time.get_ticks() - last_time >= 500 and player.pos[1] == screen_size[1] - get_floor(player.pos)[0] - player.sprite.get_height():  # Checks if the cooldown is up and if the player is touching the floor
+        if pygame.time.get_ticks() - last_time >= 500 and player.pos[1] == screen_size[1] - get_floor(player.pos, player)[0] - player.sprite.get_height():  # Checks if the cooldown is up and if the player is touching the floor
             player.vel[1] = -14
             last_time = pygame.time.get_ticks()
     if keys[pygame.K_d]:
@@ -59,37 +46,26 @@ while True:  # Begin the main loop
     if keys[pygame.K_LALT] and keys[pygame.K_BACKSPACE]:
         sys.exit()
 
-    player.animate()
-
     for i in range(15):  # Adds some markers every hundred pixels, just for scale
         screen.blit(marker, (i * 100, 0))
 
-    vel_check_decay(player)
+    for entity in loaded_entities:
+        entity.animate()
+        vel_check_decay(entity)
 
-    prev_pos = copy.deepcopy(player.pos)
-    player.pos[0] += player.vel[0]
-    player.pos[1] += player.vel[1]
+        prev_frame_pos = copy.deepcopy(entity.pos)
+        entity.pos[0] += entity.vel[0]
+        entity.pos[1] += entity.vel[1]
+        entity.hitbox = pygame.Rect(entity.pos, (entity.hitbox.width, entity.hitbox.height))
+        terrain_collision(entity, prev_frame_pos)  # Ensures proper terrain collision
 
-    floor_offset = get_floor(player.pos)[0]
+        for e in loaded_entities:  # Make this into entity collision. When enemies bump into each other they should change direction, when players bump into enemy sides they lose health but when they bump into enemy tops they kill the enemy
+            if entity.hitbox.colliderect(e.hitbox):
+                pass
 
-    if get_floor(player.pos)[0] != get_floor(prev_pos)[0]:  # If the current frame's floor offset is different from the previous frame
-        if player.pos[1] >= screen_size[1] - player.sprite.get_height() - floor_offset:  # If the player's y-position is below the current floor
-            player.vel[0] = 0
-            player.pos[0] = prev_pos[0]  # Set the player back to where they were on the previous frame, meaning that the player won't be able to move into the wall
-            floor_offset = get_floor(player.pos)[0]  # Changes the floor offset according to the new player position
+        entity.sprite.set_colorkey((255, 255, 255))  # Keys out white background from all sprites, allowing transparency
+        screen.blit(entity.sprite, entity.pos)  # Renders all entities to the screen
 
-    if not player.pos[1] >= screen_size[1] - player.sprite.get_height() - floor_offset:  # If the player is above the floor
-        player.vel[1] += 0.5
-    else:
-        player.vel[1] = 0
-        player.pos[1] = (screen_size[1] - player.sprite.get_height()) - floor_offset
-
-    print(f"{player.vel} - {player.pos}")
-    print(prev_pos)
-    print(screen_size[1] - floor_offset - player.sprite.get_height())
-
-    player.sprite.set_colorkey((255, 255, 255))
-    screen.blit(player.sprite, player.pos)
     pygame.display.update()
 
     main_clock.tick(60)  # Locks the game to run at 60 FPS
