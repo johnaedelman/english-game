@@ -11,11 +11,16 @@ class Entity:
         self.facing = "LEFT"
         self.animation = [self.sprite]
         self.animation_index = 0
+        self.hitbox = None
 
         for key, value in kwargs.items():
             setattr(self, key, value)
+        self.sprite = self.animation[0]
 
-    def animate(self):
+        if self.hitbox is None:
+            self.hitbox = pygame.Rect((self.pos, (self.sprite.get_width(), self.sprite.get_height())))
+
+    def animate(self):  # Should be called every frame
         if self.animation_index > len(self.animation) - 1:
             self.animation_index = 0
         self.sprite = self.animation[self.animation_index]
