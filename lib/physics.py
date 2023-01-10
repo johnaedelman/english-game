@@ -1,5 +1,5 @@
 
-vel_constant = 0.125  # The amount which velocity decays by
+vel_constant = 0.25  # The amount which velocity decays by
 
 
 def vel_check_decay(entity):  # Checks if the entity's x-velocity exceeds its maximum. If not, decays velocity so entity can come to a stop when moving. y-vel handled separately
