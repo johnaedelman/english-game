@@ -7,6 +7,7 @@ print("she call me hemingway when i frederic on her henry")
 
 
 pygame.init()
+pygame.mixer.init()
 pygame.display.set_caption("A Farewell To Arms: The Game")
 pygame.display.set_icon(pygame.image.load("assets/sprites/icon.jpg"))
 screen = pygame.display.set_mode(screen_size)
@@ -15,8 +16,11 @@ main_clock = pygame.time.Clock()
 terrain = pygame.image.load("assets/sprites/terrain.png")
 marker = pygame.image.load("assets/sprites/marker.png")
 henry = pygame.image.load("assets/sprites/henry.png")
+henry_jump = pygame.image.load("assets/sprites/henry_jump.png")
 quartz = pygame.image.load("assets/sprites/quartz.png")
+augh = pygame.mixer.Sound("assets/sounds/augh.mp3")
 animation_cycle = [henry, henry, henry, henry, henry]
+jump_animation = [henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, animation_cycle]
 player = Entity("player", animation=animation_cycle)
 enemy = Entity("arnold")
 
@@ -35,6 +39,8 @@ while True:  # Begin the main loop
     keys = pygame.key.get_pressed()  # Checks keypresses to determine velocity changes and such
     if keys[pygame.K_SPACE]:
         if pygame.time.get_ticks() - last_time >= 500 and player.pos[1] == screen_size[1] - get_floor(player.pos, player)[0] - player.sprite.get_height():  # Checks if the cooldown is up and if the player is touching the floor
+            augh.play()
+            player.animation = jump_animation
             player.vel[1] = -14
             last_time = pygame.time.get_ticks()
     if keys[pygame.K_d]:
