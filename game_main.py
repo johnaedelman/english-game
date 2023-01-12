@@ -20,8 +20,8 @@ animation_cycle = [henry, henry, henry, henry, henry]
 player = Entity("player", animation=animation_cycle)
 enemy = Entity("arnold")
 
-loaded_entities = [player, enemy]
-print(player.hitbox.width)
+loaded_entities = [player]
+
 last_time = 0  # The number of elapsed milliseconds the last time this value was checked. Used for cooldowns. May need to create multiple, one for each cooldown
 
 while True:  # Begin the main loop
@@ -34,9 +34,12 @@ while True:  # Begin the main loop
 
     keys = pygame.key.get_pressed()  # Checks keypresses to determine velocity changes and such
     if keys[pygame.K_SPACE]:
-        if pygame.time.get_ticks() - last_time >= 500 and player.pos[1] == screen_size[1] - get_floor(player.pos, player)[0] - player.sprite.get_height():  # Checks if the cooldown is up and if the player is touching the floor
-            player.vel[1] = -14
-            last_time = pygame.time.get_ticks()
+        if pygame.time.get_ticks() - last_time >= 500:
+            for line in terrain_lines:
+                if player.hitbox.clipline(line) and player.pos[1] + player.hitbox.height == line[0][1]:  # Checks if the cooldown is up and if the player is touching the floor
+                    player.vel[1] = -14
+                    last_time = pygame.time.get_ticks()
+                    break
     if keys[pygame.K_d]:
         player.vel[0] += 1
         player.facing = "RIGHT"
@@ -46,6 +49,8 @@ while True:  # Begin the main loop
     if keys[pygame.K_LALT] and keys[pygame.K_BACKSPACE]:
         sys.exit()
 
+    for line in terrain_lines:
+        pygame.draw.line(screen, (255, 255, 255), line[0], line[1])
     for i in range(15):  # Adds some markers every hundred pixels, just for scale
         screen.blit(marker, (i * 100, 0))
 
@@ -57,7 +62,20 @@ while True:  # Begin the main loop
         entity.pos[0] += entity.vel[0]
         entity.pos[1] += entity.vel[1]
         entity.hitbox = pygame.Rect(entity.pos, (entity.hitbox.width, entity.hitbox.height))
-        terrain_collision(entity, prev_frame_pos)  # Ensures proper terrain collision
+        pygame.draw.rect(screen, (255, 255, 255), entity.hitbox)
+
+        for line in terrain_lines:
+            if entity.hitbox.clipline(line) != ():  # Clipline returns a tuple, if it's not empty that means there's a collision
+                print(f"-------\n{entity.pos}\n{entity.hitbox.clipline(line)}\n{line}\n{entity.pos[0] + entity.hitbox.width, entity.pos[1] + entity.hitbox.height}")
+                clip = entity.hitbox.clipline(line)
+
+                break
+
+            if terrain_lines.index(line) == len(terrain_lines) - 1:
+                entity.vel[1] += 0.5
+                print(entity.pos)
+
+
 
         for e in loaded_entities:  # Make this into entity collision. When enemies bump into each other they should change direction, when players bump into enemy sides they lose health but when they bump into enemy tops they kill the enemy
             if entity.hitbox.colliderect(e.hitbox):
@@ -65,6 +83,7 @@ while True:  # Begin the main loop
 
         entity.sprite.set_colorkey((255, 255, 255))  # Keys out white background from all sprites, allowing transparency
         screen.blit(entity.sprite, entity.pos)  # Renders all entities to the screen
+
 
     pygame.display.update()
 
