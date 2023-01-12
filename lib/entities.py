@@ -10,6 +10,7 @@ class Entity:
         self.max_vel = 5  # Velocity cap
         self.facing = "LEFT"
         self.animation = [self.sprite]
+        self.animations = []
         self.animation_index = 0
         self.hitbox = None
 
@@ -22,6 +23,9 @@ class Entity:
 
     def animate(self):  # Should be called every frame
         if self.animation_index > len(self.animation) - 1:
+            self.animation_index = 0
+        if type(self.animation[self.animation_index]) == list:
+            self.animation = self.animation[self.animation_index]
             self.animation_index = 0
         self.sprite = self.animation[self.animation_index]
         if self.facing == "RIGHT":
