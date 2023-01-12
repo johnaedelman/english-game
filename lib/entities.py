@@ -5,7 +5,7 @@ class Entity:
     def __init__(self, name, **kwargs):
         self.name = name
         self.sprite = pygame.image.load("assets/sprites/default_sprite.png")
-        self.pos = [(screen_size[0] - self.sprite.get_size()[0]) / 2, (screen_size[1] - self.sprite.get_size()[1]) / 2]  # Position
+        self.pos = [(screen_size[0] - self.sprite.get_size()[0]) / 2, 0]  # Position
         self.vel = [0, 0]  # Velocity
         self.max_vel = 5  # Velocity cap
         self.facing = "LEFT"
