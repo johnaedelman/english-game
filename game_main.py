@@ -1,3 +1,5 @@
+import pygame.time
+
 from lib.physics import *
 from lib.entities import *
 import sys
@@ -19,19 +21,22 @@ henry = pygame.image.load("assets/sprites/henry.png")
 henry_jump = pygame.image.load("assets/sprites/henry_jump.png")
 quartz = pygame.image.load("assets/sprites/quartz.png")
 augh = pygame.mixer.Sound("assets/sounds/augh.mp3")
+boom = pygame.mixer.Sound("assets/sounds/vine_boom.mp3")
+augh.set_volume(0.1)
+boom.set_volume(0.2)
 animation_cycle = [henry, henry, henry, henry, henry]
 jump_animation = [henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, animation_cycle]
-player = Entity("player", animation=animation_cycle)
-enemy = Entity("arnold")
+player = Player("player", animation=animation_cycle)
+enemy = Entity("arnold", pos=[1200, 30])
 
 loaded_entities = [player, enemy]
 print(player.hitbox.width)
 last_time = 0  # The number of elapsed milliseconds the last time this value was checked. Used for cooldowns. May need to create multiple, one for each cooldown
+last_hit = 0
 
 while True:  # Begin the main loop
     screen.fill((0, 162, 232))
-    terrain.set_colorkey((255, 255, 255))
-    screen.blit(terrain, (0, 0))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # Checks if the game window has been closed. If so, stops the program
             sys.exit()
@@ -66,11 +71,32 @@ while True:  # Begin the main loop
         terrain_collision(entity, prev_frame_pos)  # Ensures proper terrain collision
 
         for e in loaded_entities:  # Make this into entity collision. When enemies bump into each other they should change direction, when players bump into enemy sides they lose health but when they bump into enemy tops they kill the enemy
-            if entity.hitbox.colliderect(e.hitbox):
-                pass
+            if entity != e:  # Prevents entity from colliding with itself
 
+                if entity.hitbox.colliderect(e.hitbox):
+                    if type(entity) == Player:
+                        if entity.hitbox.bottom > e.hitbox.top + 15:  # If the player touches the side of the enemy
+                            if pygame.time.get_ticks() - last_hit >= 1000:  # Gives the player 1 second of invincibility between hits
+                                entity.health -= 1
+                                print(entity.health)
+                                last_hit = pygame.time.get_ticks()
+                        else:  # If the player touches the top of the enemy
+                            player.vel[1] = -14
+                            boom.play()
+                            player.animation = jump_animation
+                            loaded_entities.remove(e)   # Kill enemy
+
+    render_offset = -(player.pos[0] - ((screen_size[0] - player.sprite.get_size()[0]) / 2))
+
+    terrain.set_colorkey((255, 255, 255))
+    screen.blit(terrain, (render_offset, 0))
+
+    for entity in loaded_entities:
         entity.sprite.set_colorkey((255, 255, 255))  # Keys out white background from all sprites, allowing transparency
-        screen.blit(entity.sprite, entity.pos)  # Renders all entities to the screen
+        if type(entity) == Player:
+            screen.blit(entity.sprite, (((screen_size[0] - player.sprite.get_size()[0]) / 2), entity.pos[1]))
+        else:
+            screen.blit(entity.sprite, (render_offset + entity.pos[0], entity.pos[1]))  # Renders all entities to the screen
 
     pygame.display.update()
 
