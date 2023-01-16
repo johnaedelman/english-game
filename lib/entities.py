@@ -17,6 +17,7 @@ class Entity:
         for key, value in kwargs.items():
             setattr(self, key, value)
         self.sprite = self.animation[0]
+        self.pos[0] = (screen_size[0] - self.sprite.get_size()[0]) / 2
 
         if self.hitbox is None:
             self.hitbox = pygame.Rect((self.pos, (self.sprite.get_width(), self.sprite.get_height())))
@@ -34,5 +35,6 @@ class Entity:
 
 
 class Player(Entity):
-    def __init(self, name):
-        super().__init__(name)
+    def __init__(self, name, **kwargs):
+        super().__init__(name, **kwargs)
+        self.health = 4
