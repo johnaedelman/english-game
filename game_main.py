@@ -13,7 +13,7 @@ pygame.display.set_icon(pygame.image.load("assets/sprites/icon.jpg"))
 screen = pygame.display.set_mode(screen_size)
 main_clock = pygame.time.Clock()
 
-terrain = pygame.image.load("assets/sprites/terrain.png")
+terrain = pygame.image.load("assets/sprites/basebackground.jpg")
 marker = pygame.image.load("assets/sprites/marker.png")
 henry = pygame.image.load("assets/sprites/henry.png")
 henry_jump = pygame.image.load("assets/sprites/henry_jump.png")
@@ -24,12 +24,13 @@ jump_animation = [henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, he
 player = Entity("player", animation=animation_cycle)
 enemy = Entity("arnold")
 
+
 loaded_entities = [player, enemy]
 print(player.hitbox.width)
 last_time = 0  # The number of elapsed milliseconds the last time this value was checked. Used for cooldowns. May need to create multiple, one for each cooldown
 
 while True:  # Begin the main loop
-    screen.fill((0, 162, 232))
+    screen.fill((255, 255, 255))
     terrain.set_colorkey((255, 255, 255))
     screen.blit(terrain, (0, 0))
     for event in pygame.event.get():
