@@ -13,7 +13,7 @@ pygame.display.set_icon(pygame.image.load("assets/sprites/icon.jpg"))
 screen = pygame.display.set_mode(screen_size)
 main_clock = pygame.time.Clock()
 
-player = Player("player", animation=henry_animations["DEFAULT"], animations=henry_animations)
+player = Player("Henry", animation=henry_animations["DEFAULT"], animations=henry_animations)
 enemy = Enemy("arnold", facing="RIGHT", animation=austrian_animations["DEFAULT"], animations=austrian_animations)
 enemy2 = Enemy("enemy2", pos=[100, 0], animation=austrian_animations["DEFAULT"], animations=austrian_animations)
 enemy3 = Enemy("jarulius", pos=[1080, 0], animation=austrian_animations["DEFAULT"], animations=austrian_animations)
@@ -21,11 +21,18 @@ powerup = Powerup("alcohol1", powerup_type="ALCOHOL", pos=[0, 0])
 powerup2 = Powerup("alcohol2", powerup_type="ALCOHOL", pos=[100, 0])
 powerup3 = Powerup("alcohol3", powerup_type="ALCOHOL", pos=[200, 0])
 powerup4 = Powerup("coffeebeans", powerup_type="COFFEEBEANS", pos=[-100, 0])
+friendly_entity_1 = FriendlyEntity("Rinaldi", pos=[1500, 0])
+
+textbox_1 = Textbox("Rinaldi: ", "Frederic, baby! You look like death! It's a terrible case of the jaundice. I have some coffee beans here, these are sure to get the alcohol out of your liver.", 5000, 30)
+textbox_2 = Textbox("Henry: ", "Thanks, Rinaldi. All of these Austrians are making me nervous. I hope Catherine is well.", 4000, 30)
+textbox_3 = Textbox("Rinaldi: ", "Oh, I'm sure she's fine. No Austrian could capture old Miss Barkley. Good luck finding her, Henry!", 4000, 30)
+
+friendly_entity_1.conversation = [textbox_1, textbox_2, textbox_3]
 
 death_textbox = Textbox(None, "You died! Rinaldi and Catherine will have to bury you...", 4000, 50)
 current_textbox = None
 paused = False
-loaded_entities = [player, enemy, enemy2, enemy3, powerup, powerup2, powerup3, powerup4]
+loaded_entities = [player, enemy, enemy2, enemy3, powerup, powerup2, powerup3, powerup4, friendly_entity_1]
 frame_counter = 0
 
 while True:  # Begin the main loop
@@ -53,6 +60,13 @@ while True:  # Begin the main loop
         sys.exit()
 
     for entity in loaded_entities:
+        if type(entity) == FriendlyEntity:
+            if entity.check_on_screen(loaded_entities) and not entity.conversed:
+                paused = True
+                current_textbox = entity.run_conversation()
+                if current_textbox is None:
+                    paused = False
+
         if not paused:
             if type(entity) == Enemy:
                 entity.check_direction(get_floor(entity.pos, entity))  # Ensures the enemy is facing the correct direction and won't walk into a wall or fall off a cliff
