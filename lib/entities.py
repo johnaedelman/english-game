@@ -127,3 +127,37 @@ class Powerup(Entity):
         target.alcohol_consumed = 0
         target.check_jaundice()
         eat.play()
+
+
+class FriendlyEntity(Entity):
+    def __init__(self, name, **kwargs):
+        self.conversed = False  # If you already talked to this entity
+        self.conversation = []  # All of the textboxes for the conversation with this entity
+        self.conversation_index = 0
+        super().__init__(name, **kwargs)
+
+    def check_on_screen(self, entities):  # Checks that this entity is on screen and there are no enemies on screen to initiate conversation
+        player = None
+        enemies = []
+        for entity in entities:
+            if type(entity) == Player:
+                player = entity
+            if type(entity) == Enemy:
+                enemies.append(entity)
+        if player is not None:
+            for enemy in enemies:
+                if player.pos[0] + (screen_size[0] + player.hitbox.width) / 2 >= enemy.pos[0] >= player.pos[0] - (screen_size[0] + player.hitbox.width) / 2:
+                    return False  # If there are any enemies onscreen, return False
+            if player.pos[0] - 250 + (screen_size[0] + player.hitbox.width) / 2 >= self.pos[0] >= player.pos[0] + 250 - (screen_size[0] + player.hitbox.width) / 2:
+                return True  # If the entity is onscreen and no enemies are onscreen, return True
+        return False  # If the player is dead or is not on the same screen as the entity, return False
+
+    def run_conversation(self):  # Set current_textbox to the output of this function every frame
+        try:
+            if self.conversation[self.conversation_index].finished:
+                self.conversation_index += 1
+            return self.conversation[self.conversation_index]
+        except IndexError:
+            self.conversed = True
+            return None
+
