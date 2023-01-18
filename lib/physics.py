@@ -15,6 +15,10 @@ def vel_check_decay(entity):  # Checks if the entity's x-velocity exceeds its ma
         entity.vel[0] = -entity.max_vel
     if entity.vel[0] > entity.max_vel:
         entity.vel[0] = entity.max_vel
+    if entity.vel[1] < -15:  # Ensures that the player will never clip through an enemy when falling from a great height
+        entity.vel[1] = -15
+    if entity.vel[1] > 15:
+        entity.vel[1] = 15
 
 
 def get_floor(position, entity):
