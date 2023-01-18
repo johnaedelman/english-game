@@ -116,6 +116,7 @@ while True:  # Begin the main loop
 
     render_offset = -(player.pos[0] - ((screen_size[0] - player.sprite.get_size()[0]) / 2))  # Pos to offset everything by when rendering, allows camera movement
 
+    screen.blit(background, (0, 0))
     terrain.set_colorkey((255, 255, 255))
     screen.blit(terrain, (render_offset, 0))
 
