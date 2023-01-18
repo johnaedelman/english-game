@@ -1,5 +1,6 @@
 from lib.physics import *
 from lib.entities import *
+from lib.gui import *
 import sys
 import copy
 
@@ -12,12 +13,16 @@ pygame.display.set_icon(pygame.image.load("assets/sprites/icon.jpg"))
 screen = pygame.display.set_mode(screen_size)
 main_clock = pygame.time.Clock()
 
-player = Player("player", animation=henry_default_animation)
+player = Player("player", animation=henry_animations["DEFAULT"], animations=henry_animations)
 enemy = Enemy("arnold", facing="RIGHT")
 enemy2 = Enemy("enemy2", pos=[100, 0])
 enemy3 = Enemy("jarulius", pos=[1080, 0])
+powerup = Powerup("alcohol1", powerup_type="ALCOHOL", pos=[0, 0])
+powerup2 = Powerup("alcohol2", powerup_type="ALCOHOL", pos=[100, 0])
+powerup3 = Powerup("alcohol3", powerup_type="ALCOHOL", pos=[200, 0])
 
-loaded_entities = [player, enemy, enemy2, enemy3]
+current_textbox = None
+loaded_entities = [player, enemy, enemy2, enemy3, powerup, powerup2, powerup3]
 frame_counter = 0
 
 while True:  # Begin the main loop
@@ -31,7 +36,7 @@ while True:  # Begin the main loop
     if keys[pygame.K_SPACE]:
         if pygame.time.get_ticks() - player.last_jump >= 500 and player.pos[1] == screen_size[1] - get_floor(player.pos, player)[0] - player.hitbox.height:  # Checks if the cooldown is up and if the player is touching the floor
             jump.play()
-            player.animation = henry_jump_animation
+            player.animation = player.animations["JUMP"]
             player.vel[1] = -14
             player.last_jump = pygame.time.get_ticks()
     if keys[pygame.K_d]:
@@ -61,20 +66,26 @@ while True:  # Begin the main loop
                 if entity.hitbox.colliderect(e.hitbox):
 
                     if type(entity) == Player:
-                        if entity.hitbox.bottom > e.hitbox.top + 15:  # If the player touches anywhere except the top of the enemy
-                            if pygame.time.get_ticks() - entity.last_collision >= 1000:  # Gives the player 1 second of invincibility between hits
-                                entity.health -= 1
-                                print(entity.health)
-                                player.last_collision = pygame.time.get_ticks()
-                                riff.play()
-                        else:  # If the player touches the top of the enemy
-                            if pygame.time.get_ticks() - entity.last_collision >= 1000:
-                                player.vel[1] = -14
-                                boom.play()
-                                player.animation = henry_jump_animation
-                                loaded_entities.remove(e)   # Kill enemy
+                        if type(e) == Enemy:  # If the player is colliding with an enemy
+                            if entity.hitbox.bottom > e.hitbox.top + 15:  # If the player touches anywhere except the top of the enemy
+                                if pygame.time.get_ticks() - entity.last_collision >= 1000:  # Gives the player 1 second of invincibility between hits
+                                    entity.health -= 1
+                                    player.last_collision = pygame.time.get_ticks()
+                                    riff.play()
+                            else:  # If the player touches the top of the enemy
+                                if pygame.time.get_ticks() - entity.last_collision >= 1000:
+                                    player.vel[1] = -14
+                                    boom.play()
+                                    player.animation = player.animations["JUMP"]
+                                    loaded_entities.remove(e)   # Kill enemy
+                        elif type(e) == Powerup:
+                            e.effect(entity)
+                            drink.play()
+                            loaded_entities.remove(e)
+                            if player.check_jaundice():
+                                current_textbox = Textbox(None, "You drank too much! You have contracted jaundice and will now move more slowly.", 2500, 50)
 
-                    if type(entity) == Enemy and pygame.time.get_ticks() - entity.last_collision >= 1000:  # Makes enemies turn around when colliding with other entities
+                    if type(entity) == Enemy and pygame.time.get_ticks() - entity.last_collision >= 1000 and type(e) != Powerup:  # Makes enemies turn around when colliding with other enemies or the player
                         if entity.facing == "LEFT":
                             entity.facing = "RIGHT"
                         elif entity.facing == "RIGHT":
@@ -98,14 +109,11 @@ while True:  # Begin the main loop
         else:
             screen.blit(entity.sprite, (render_offset + entity.pos[0], entity.pos[1]))  # Renders all entities to the screen
 
-    healthbar_text.set_colorkey((255, 255, 255))  # Renders health GUI
-    heart_empty.set_colorkey((255, 255, 255))
-    heart_full.set_colorkey((255, 255, 255))
-    screen.blit(healthbar_text, (-5, 0))
-    for i in range(3):
-        screen.blit(heart_empty, (i * 80 + 25, 50))
-    for i in range(player.health):
-        screen.blit(heart_full, (i * 80 + 25, 50))
+    render_health(player.health, screen)  # You will never guess what this function does
+
+    if current_textbox is not None:
+        current_textbox.adjust_pos()
+        screen.blit(current_textbox.sprite, current_textbox.pos)
 
     pygame.display.update()
     frame_counter += 1
