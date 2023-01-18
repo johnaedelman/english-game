@@ -12,8 +12,9 @@ class Textbox:
         self.pos = [240, 720]
         self.time_visible = 0  # The time at which the textbox became fully visible
         self.fully_visible = False  # Flag to confirm when the textbox is fully visible
-        self.sprite = textbox
+        self.sprite = pygame.image.load("assets/sprites/textbox.png")
         self.font = pygame.font.SysFont("courier", font_size)
+        self.finished = False  # If the textbox is done displaying
 
         self.text = self.text.split(" ")  # This part of the constructor renders the text to the textbox with text wrapping
         self.text.append(" ")
@@ -36,15 +37,18 @@ class Textbox:
                     num_lines += 1
 
     def adjust_pos(self):  # Should be called every frame
-        if not self.fully_visible:
-            if self.pos[1] > 420:
-                self.pos[1] -= 5
-            else:
-                self.time_visible = pygame.time.get_ticks()
-                self.fully_visible = True
-        if pygame.time.get_ticks() - self.time_visible > self.duration and self.fully_visible:
-            if self.pos[1] < 720:
-                self.pos[1] += 5
+        if not self.finished:
+            if not self.fully_visible:
+                if self.pos[1] > 420:
+                    self.pos[1] -= 5
+                else:
+                    self.time_visible = pygame.time.get_ticks()
+                    self.fully_visible = True
+            if pygame.time.get_ticks() - self.time_visible > self.duration and self.fully_visible:
+                if self.pos[1] < 720:
+                    self.pos[1] += 5
+                else:
+                    self.finished = True
 
 
 def render_health(health, display):
