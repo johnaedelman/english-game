@@ -11,6 +11,7 @@ pygame.mixer.init()
 terrain = pygame.image.load("assets/sprites/terrain.png")
 marker = pygame.image.load("assets/sprites/marker.png")
 default_sprite = pygame.image.load("assets/sprites/default_sprite.png")
+background = pygame.image.load("assets/sprites/basebackground.jpg")
 
 healthbar_text = pygame.image.load("assets/sprites/healthbar_text.png")
 heart_empty = pygame.image.load("assets/sprites/heart_empty.png")
