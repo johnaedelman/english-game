@@ -106,7 +106,7 @@ class Powerup(Entity):
         self.sprites = {
             "": default_sprite,
             "ALCOHOL": alcohol,
-            "COFFEEBEANS": default_sprite
+            "COFFEEBEANS": coffeebeans
         }
         self.animation = [self.sprites[self.powerup_type]]
         self.effect = self.effects[self.powerup_type]
@@ -120,7 +120,10 @@ class Powerup(Entity):
     def alcohol_effect(target):
         target.health += 1
         target.alcohol_consumed += 1
+        drink.play()
 
     @staticmethod
     def coffee_beans_effect(target):
         target.alcohol_consumed = 0
+        target.check_jaundice()
+        eat.play()
