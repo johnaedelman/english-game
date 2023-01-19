@@ -3,8 +3,12 @@ import pygame
 screen_size = (1280, 720)
 
 terrain_floor = [
-    [0, 540, 200],  # Lower bound on x-axis, upper bound on x-axis, y-value to set as floor
-    [541, 1080, 400]
+    [-720, 85, 708],
+    [86, 781, 203],
+    [782, 1992, 369],
+    [1993, 3499, 57],
+    [3500, 3763, 249],
+    [3764, 5397, 404]
 ]
 
 pygame.mixer.init()

@@ -17,10 +17,10 @@ player = Player("Henry", animation=henry_animations["DEFAULT"], animations=henry
 enemy = Enemy("arnold", facing="RIGHT", animation=austrian_animations["DEFAULT"], animations=austrian_animations)
 enemy2 = Enemy("enemy2", pos=[100, 0], animation=austrian_animations["DEFAULT"], animations=austrian_animations)
 enemy3 = Enemy("jarulius", pos=[1080, 0], animation=austrian_animations["DEFAULT"], animations=austrian_animations)
-powerup = Powerup("alcohol1", powerup_type="ALCOHOL", pos=[0, 0])
+powerup = Powerup("alcohol1", powerup_type="ALCOHOL", pos=[300, 0])
 powerup2 = Powerup("alcohol2", powerup_type="ALCOHOL", pos=[100, 0])
 powerup3 = Powerup("alcohol3", powerup_type="ALCOHOL", pos=[200, 0])
-powerup4 = Powerup("coffeebeans", powerup_type="COFFEEBEANS", pos=[-100, 0])
+powerup4 = Powerup("coffeebeans", powerup_type="COFFEEBEANS", pos=[400, 0])
 friendly_entity_1 = FriendlyEntity("Rinaldi", pos=[1500, 0])
 
 textbox_1 = Textbox("Rinaldi: ", "Mama Mia!! Frederic, baby! You look like death! You have contracted a terrible case of the disease known as jaundice. Here! Here my good man, have some delicious coffee beans, these are sure to get the alcohol out of your liver.", 5000, 30)
@@ -32,7 +32,7 @@ friendly_entity_1.conversation = [textbox_1, textbox_2, textbox_3]
 death_textbox = Textbox(None, "FAIL! You died! Rinaldi and Catherine will have to bury your skeleton into the earth in  a large hole they have dug with a shovel.  ", 4600, 46)
 current_textbox = None
 paused = False
-loaded_entities = [player, enemy, enemy2, enemy3, powerup, powerup2, powerup3, powerup4, friendly_entity_1]
+loaded_entities = [player, enemy, enemy2, enemy3, powerup, powerup2, powerup3, powerup4]
 frame_counter = 0
 
 while True:  # Begin the main loop
@@ -50,12 +50,15 @@ while True:  # Begin the main loop
                 player.animation = player.animations["JUMP"]
                 player.vel[1] = -14
                 player.last_jump = pygame.time.get_ticks()
+                player.has_moved = True
         if keys[pygame.K_d]:
             player.vel[0] += 1
             player.facing = "RIGHT"
+            player.has_moved = True
         if keys[pygame.K_a]:
             player.vel[0] -= 1
             player.facing = "LEFT"
+            player.has_moved = True
     if keys[pygame.K_LALT] and keys[pygame.K_BACKSPACE]:
         sys.exit()
 
@@ -85,9 +88,9 @@ while True:  # Begin the main loop
                     if entity.hitbox.colliderect(e.hitbox):
 
                         if type(entity) == Player:
-                            if type(e) == Enemy:  # If the player is colliding with an enemy
+                            if type(e) == Enemy and entity.has_moved:  # If the player is colliding with an enemy
                                 if entity.hitbox.bottom > e.hitbox.top + 15:  # If the player touches anywhere except the top of the enemy
-                                    if pygame.time.get_ticks() - entity.last_collision >= 1500:  # Gives the player 1 second of invincibility between hits
+                                    if pygame.time.get_ticks() - entity.last_collision >= 1000:  # Gives the player 1 second of invincibility between hits
                                         entity.health -= 1
                                         if entity.health <= 0:
                                             current_textbox = death_textbox
@@ -118,16 +121,20 @@ while True:  # Begin the main loop
 
     screen.blit(background, (0, 0))
     terrain.set_colorkey((255, 255, 255))
-    screen.blit(terrain, (render_offset, 0))
+    screen.blit(terrain, (render_offset - 720, 0))
 
     for entity in loaded_entities:  # Renders entities to screen
         entity.sprite.set_colorkey((255, 255, 255))  # Keys out white background from all sprites, allowing transparency
         if type(entity) == Player:
-            if pygame.time.get_ticks() - entity.last_collision >= 1000:
-                screen.blit(entity.sprite, (((screen_size[0] - player.sprite.get_size()[0]) / 2), entity.pos[1]))
-            else:
+            if not player.has_moved:
                 if frame_counter % 5 == 0:  # Makes the player sprite blink to indicate invincibility frames
                     screen.blit(entity.sprite, (((screen_size[0] - player.sprite.get_size()[0]) / 2), entity.pos[1]))
+            else:
+                if pygame.time.get_ticks() - entity.last_collision >= 1000:
+                    screen.blit(entity.sprite, (((screen_size[0] - player.sprite.get_size()[0]) / 2), entity.pos[1]))
+                else:
+                    if frame_counter % 5 == 0:  # Makes the player sprite blink to indicate invincibility frames
+                        screen.blit(entity.sprite, (((screen_size[0] - player.sprite.get_size()[0]) / 2), entity.pos[1]))
 
         else:
             screen.blit(entity.sprite, (render_offset + entity.pos[0], entity.pos[1]))  # Renders all entities to the screen

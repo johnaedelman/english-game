@@ -53,6 +53,7 @@ class Player(Entity):
         self.last_jump = 0  # The time when the player last jumped
         self.alcohol_consumed = 0  # The number of times you've drunk alcohol
         self.jaundiced = False  # Whether or not the player has jaundice
+        self.has_moved = False
         super().__init__(name, **kwargs)
 
     def check_jaundice(self):
