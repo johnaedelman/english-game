@@ -2,16 +2,14 @@ from lib.physics import *
 from lib.entities import *
 from lib.gui import *
 import sys
-import copy
-
-print("she call me hemingway when i frederic on her henry")
-
+from copy import deepcopy
 
 pygame.init()
 pygame.display.set_caption("A Farewell To Arms: The Game")
 pygame.display.set_icon(pygame.image.load("assets/sprites/icon.jpg"))
 screen = pygame.display.set_mode(screen_size)
 main_clock = pygame.time.Clock()
+pygame.mixer.music.load("assets/sounds/italian_music.mp3")
 
 player = Player("Henry", animation=henry_animations["DEFAULT"], animations=henry_animations)
 
@@ -60,6 +58,8 @@ ending_cutscene = False
 loaded_entities = [player, enemy, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7, enemy8, enemy9, enemy10, enemy11, enemy12, enemy13, enemy14, enemy15, enemy16, enemy17, powerup, powerup2, powerup3, powerup4, powerup5, powerup6, friendly_entity_1, friendly_entity_2]
 frame_counter = 0
 
+pygame.mixer.music.set_volume(0.23)
+pygame.mixer.music.play(loops=-1)
 while True:  # Begin the main loop
     screen.fill((0, 162, 232))
 
@@ -104,7 +104,7 @@ while True:  # Begin the main loop
             entity.animate()
             vel_check_decay(entity)
 
-            prev_frame_pos = copy.deepcopy(entity.pos)
+            prev_frame_pos = deepcopy(entity.pos)
             entity.pos[0] += entity.vel[0]
             entity.pos[1] += entity.vel[1]
             entity.hitbox = pygame.Rect(entity.pos, (entity.hitbox.width, entity.hitbox.height))
@@ -124,11 +124,11 @@ while True:  # Begin the main loop
                                             paused = True
                                             loaded_entities.remove(entity)
                                         player.last_collision = pygame.time.get_ticks()
-                                        riff.play()
+                                        hurt.play()
                                 else:  # If the player touches the top of the enemy
                                     if pygame.time.get_ticks() - entity.last_collision >= 1000:
                                         player.vel[1] = -14
-                                        boom.play()
+                                        crush.play()
                                         player.animation = player.animations["JUMP"]
                                         loaded_entities.remove(e)   # Kill enemy
                             elif type(e) == Powerup:
@@ -156,7 +156,7 @@ while True:  # Begin the main loop
 
     if textbox_6.finished:
         if not ending_cutscene:
-            player.final_pos = copy.deepcopy(player.pos)
+            player.final_pos = deepcopy(player.pos)
             ending_cutscene = True
         render_offset = -(player.final_pos[0] - ((screen_size[0] - player.sprite.get_size()[0]) / 2))
 
