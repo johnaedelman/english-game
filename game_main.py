@@ -21,7 +21,7 @@ powerup = Powerup("alcohol1", powerup_type="ALCOHOL", pos=[300, 0])
 powerup2 = Powerup("alcohol2", powerup_type="ALCOHOL", pos=[100, 0])
 powerup3 = Powerup("alcohol3", powerup_type="ALCOHOL", pos=[200, 0])
 powerup4 = Powerup("coffeebeans", powerup_type="COFFEEBEANS", pos=[400, 0])
-friendly_entity_1 = FriendlyEntity("Rinaldi", pos=[1500, 0])
+friendly_entity_1 = FriendlyEntity("Rinaldi", pos=[1500, 0], animation=[rinaldi])
 
 textbox_1 = Textbox("Rinaldi: ", "Mama Mia!! Frederic, baby! You look like death! You have contracted a terrible case of the disease known as jaundice. Here! Here my good man, have some delicious coffee beans, these are sure to get the alcohol out of your liver.", 5000, 30)
 textbox_2 = Textbox("Henry: ", "Thanks, Rinaldi. All of these Austrians are making me quiver. I am terrified! I hope Catherined is feeling well.", 4000, 30)
@@ -32,7 +32,7 @@ friendly_entity_1.conversation = [textbox_1, textbox_2, textbox_3]
 death_textbox = Textbox(None, "FAIL! You died! Rinaldi and Catherine will have to bury your skeleton into the earth in  a large hole they have dug with a shovel.  ", 4600, 46)
 current_textbox = None
 paused = False
-loaded_entities = [player, enemy, enemy2, enemy3, powerup, powerup2, powerup3, powerup4]
+loaded_entities = [player, enemy, enemy2, enemy3, powerup, powerup2, powerup3, powerup4, friendly_entity_1]
 frame_counter = 0
 
 while True:  # Begin the main loop
