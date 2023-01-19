@@ -54,6 +54,7 @@ class Player(Entity):
         self.alcohol_consumed = 0  # The number of times you've drunk alcohol
         self.jaundiced = False  # Whether or not the player has jaundice
         self.has_moved = False
+        self.final_pos = [0, 0]  # Used to determine where to freeze the frame in the end cutscene
         super().__init__(name, **kwargs)
 
     def check_jaundice(self):
@@ -77,6 +78,7 @@ class Player(Entity):
 class Enemy(Entity):
     def __init__(self, name, **kwargs):
         self.movespeed = 4.5
+        self.last_player_collision = 0  # Used to determine collision specifically with the player
         super().__init__(name, **kwargs)
         self.max_vel = self.movespeed
 
@@ -126,6 +128,7 @@ class Powerup(Entity):
     @staticmethod
     def coffee_beans_effect(target):
         target.alcohol_consumed = 0
+        target.health += 1
         target.check_jaundice()
         eat.play()
 
@@ -161,4 +164,22 @@ class FriendlyEntity(Entity):
         except IndexError:
             self.conversed = True
             return None
+
+
+def calculate_score(entities, player):
+    enemies = 0
+    powerups = 0
+    enemies_killed = 17
+    powerups_consumed = 6
+    for entity in entities:
+        if type(entity) == Enemy:
+            enemies += 1
+        if type(entity) == Powerup:
+            powerups += 1
+    enemies_killed -= enemies
+    powerups_consumed -= powerups
+    damage_taken = (3 + powerups_consumed) - player.health
+    score = round((enemies_killed + powerups_consumed) / (23 + (damage_taken / 1.5)) * 1000)
+    output = f"Enemies killed: {enemies_killed}/17 - Powerups consumed: {powerups_consumed}/6 - Damage taken: {damage_taken} - Total score: {score}/1000"
+    return output
 
