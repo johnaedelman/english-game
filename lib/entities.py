@@ -182,4 +182,3 @@ def calculate_score(entities, player):
     score = round((enemies_killed + powerups_consumed) / (23 + (damage_taken / 1.5)) * 1000)
     output = f"Enemies killed: {enemies_killed}/17 - Powerups consumed: {powerups_consumed}/6 - Damage taken: {damage_taken} - Total score: {score}/1000"
     return output
-
