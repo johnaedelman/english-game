@@ -13,7 +13,7 @@ class Textbox:
         self.time_visible = 0  # The time at which the textbox became fully visible
         self.fully_visible = False  # Flag to confirm when the textbox is fully visible
         self.sprite = pygame.image.load("assets/sprites/textbox.png").convert_alpha()
-        self.sprite.set_alpha(220)  # Makes the textbox partially transparent
+        self.sprite.set_alpha(230)  # Makes the textbox partially transparent
         self.font = pygame.font.SysFont("courier", font_size)
         self.finished = False  # If the textbox is done displaying
 
