@@ -24,6 +24,7 @@ heart_full = pygame.image.load("assets/sprites/heart_full.png")
 alcohol = pygame.image.load("assets/sprites/alcohol.png")
 coffeebeans = pygame.image.load("assets/sprites/coffeebeans.png")
 
+rinaldi = pygame.image.load("assets/sprites/rizz_breen.png")
 austrian = pygame.image.load("assets/sprites/austrian.png")
 
 henry = pygame.image.load("assets/sprites/henry.png")
