@@ -71,6 +71,18 @@ while True:  # Begin the main loop
 
     keys = pygame.key.get_pressed()  # Checks keypresses to determine velocity changes and such
     if not paused:
+        if keys[pygame.K_d]:
+            player.vel[0] += 1
+            player.facing = "RIGHT"
+            player.has_moved = True
+            if player.pos[1] == screen_size[1] - get_floor(player.pos, player)[0] - player.hitbox.height:
+                player.animation = player.animations["RUN"]
+        elif keys[pygame.K_a]:
+            player.vel[0] -= 1
+            player.facing = "LEFT"
+            player.has_moved = True
+            if player.pos[1] == screen_size[1] - get_floor(player.pos, player)[0] - player.hitbox.height:
+                player.animation = player.animations["RUN"]
         if keys[pygame.K_SPACE]:
             if pygame.time.get_ticks() - player.last_jump >= 500 and player.pos[1] == screen_size[1] - get_floor(player.pos, player)[0] - player.hitbox.height:  # Checks if the cooldown is up and if the player is touching the floor
                 jump.play()
@@ -78,14 +90,6 @@ while True:  # Begin the main loop
                 player.vel[1] = -14
                 player.last_jump = pygame.time.get_ticks()
                 player.has_moved = True
-        if keys[pygame.K_d]:
-            player.vel[0] += 1
-            player.facing = "RIGHT"
-            player.has_moved = True
-        if keys[pygame.K_a]:
-            player.vel[0] -= 1
-            player.facing = "LEFT"
-            player.has_moved = True
     if keys[pygame.K_LALT] and keys[pygame.K_BACKSPACE]:
         sys.exit()
 
@@ -166,6 +170,9 @@ while True:  # Begin the main loop
         player.pos[1] = (screen_size[1] - get_floor(player.pos, player)[0]) - player.hitbox.height
         player.pos[0] += 5
         friendly_entity_2.pos[0] += 5
+        player.facing = "RIGHT"
+        friendly_entity_2.facing = "RIGHT"
+        player.animation = player.animations["RUN"]
         player.animate()
         friendly_entity_2.animate()
         if player.pos[0] > player.final_pos[0] + 640:
