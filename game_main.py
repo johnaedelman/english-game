@@ -14,25 +14,50 @@ screen = pygame.display.set_mode(screen_size)
 main_clock = pygame.time.Clock()
 
 player = Player("Henry", animation=henry_animations["DEFAULT"], animations=henry_animations)
-enemy = Enemy("arnold", facing="RIGHT", animation=austrian_animations["DEFAULT"], animations=austrian_animations)
-enemy2 = Enemy("enemy2", pos=[100, 0], animation=austrian_animations["DEFAULT"], animations=austrian_animations)
-enemy3 = Enemy("jarulius", pos=[1080, 0], animation=austrian_animations["DEFAULT"], animations=austrian_animations)
-powerup = Powerup("alcohol1", powerup_type="ALCOHOL", pos=[300, 0])
-powerup2 = Powerup("alcohol2", powerup_type="ALCOHOL", pos=[100, 0])
-powerup3 = Powerup("alcohol3", powerup_type="ALCOHOL", pos=[200, 0])
-powerup4 = Powerup("coffeebeans", powerup_type="COFFEEBEANS", pos=[400, 0])
-friendly_entity_1 = FriendlyEntity("Rinaldi", pos=[1500, 0], animation=[rinaldi])
 
-textbox_1 = Textbox("Rinaldi: ", "Mama Mia!! Frederic, baby! You look like death! You have contracted a terrible case of the disease known as jaundice. Here! Here my good man, have some delicious coffee beans, these are sure to get the alcohol out of your liver.", 5000, 30)
-textbox_2 = Textbox("Henry: ", "Thanks, Rinaldi. All of these Austrians are making me quiver. I am terrified! I hope Catherine is feeling well.", 4000, 30)
+enemy = Enemy("austrian1", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[1400, 340])
+enemy2 = Enemy("austrian2", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[2200, 400])
+enemy3 = Enemy("fastaustrian1", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[2800, 500], movespeed=7)
+enemy4 = Enemy("austrian3", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[3300, 500])
+enemy5 = Enemy("austrian4", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[3920, 350])
+enemy6 = Enemy("austrian5", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[4300, 350])
+enemy7 = Enemy("austrian6", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[4520, 350])
+enemy8 = Enemy("fastaustrian2", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[5600, 450], movespeed=7)
+enemy9 = Enemy("fastaustrian3", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[6780, 600], movespeed=7)
+enemy10 = Enemy("fastaustrian4", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[7100, 600], movespeed=7)
+enemy11 = Enemy("austrian7", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[9700, 600])
+enemy12 = Enemy("fastaustrian5", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[10100, 600], movespeed=7)
+enemy13 = Enemy("austrian8", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[10900, 400])
+enemy14 = Enemy("austrian9", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[11780, 550])
+enemy15 = Enemy("fastaustrian6", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[11980, 550], movespeed=7)
+enemy16 = Enemy("fastaustrian7", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[12350, 550], movespeed=7)
+enemy17 = Enemy("austrian10", animation=austrian_animations["DEFAULT"], animations=austrian_animations, pos=[12450, 550])
+
+powerup = Powerup("alcohol1", powerup_type="ALCOHOL", pos=[1800, 0])
+powerup2 = Powerup("alcohol2", powerup_type="ALCOHOL", pos=[3650, 0])
+powerup3 = Powerup("alcohol3", powerup_type="ALCOHOL", pos=[5700, 0])
+powerup4 = Powerup("alcohol4", powerup_type="ALCOHOL", pos=[9900, 0])
+powerup5 = Powerup("alcohol5", powerup_type="ALCOHOL", pos=[11650, 0])
+powerup6 = Powerup("coffeebeans", powerup_type="COFFEEBEANS", pos=[7900, 0])
+
+friendly_entity_1 = FriendlyEntity("Rinaldi", pos=[7750, 0], animation=[rinaldi])
+friendly_entity_2 = FriendlyEntity("Catherine", pos=[13400, 0])
+
+textbox_1 = Textbox("Rinaldi: ", "Mama Mia! Frederic, baby! You look like death! It must be a terrible case of the jaundice. Here! Here, my good man! Have some delicious coffee beans, these are sure to get the alcohol out of your liver.", 5000, 30)
+textbox_2 = Textbox("Henry: ", "Thanks, Rinaldi. I was beginning to fear for my life, with all these Austrians about. I hope all is well with Catherine.", 4000, 30)
 textbox_3 = Textbox("Rinaldi: ", "Oh, I'm sure she's fine. No Austrian could capture old Miss Barkley. Good luck finding her, baby!", 4000, 30)
-
 friendly_entity_1.conversation = [textbox_1, textbox_2, textbox_3]
 
-death_textbox = Textbox(None, "FAIL! You died! Rinaldi and Catherine will have to bury your skeleton into the earth in  a large hole they have dug with a shovel.  ", 4600, 46)
+textbox_4 = Textbox("Henry: ", "Oh, Catherine! I'm glad you're safe.", 4000, 50)
+textbox_5 = Textbox("Catherine: ", "Henry! It's a joy to see you. I was never very worried about these Austrians, to be truthful. I was only wondering when you would come for me.", 5000, 30)
+textbox_6 = Textbox("Henry: ", "Well, I'm here now, Cat. Shall we go get something to eat? I haven't had anything but alcohol and coffee beans today. It's an injustice. I was born to eat.", 5000, 30)
+friendly_entity_2.conversation = [textbox_4, textbox_5, textbox_6]
+
+death_textbox = Textbox(None, "You died! Rinaldi and Catherine will have to bury your skeleton into the earth in a large hole, which they have dug with a shovel.", 5000, 40)
 current_textbox = None
 paused = False
-loaded_entities = [player, enemy, enemy2, enemy3, powerup, powerup2, powerup3, powerup4]
+ending_cutscene = False
+loaded_entities = [player, enemy, enemy2, enemy3, enemy4, enemy5, enemy6, enemy7, enemy8, enemy9, enemy10, enemy11, enemy12, enemy13, enemy14, enemy15, enemy16, enemy17, powerup, powerup2, powerup3, powerup4, powerup5, powerup6, friendly_entity_1, friendly_entity_2]
 frame_counter = 0
 
 while True:  # Begin the main loop
@@ -69,6 +94,8 @@ while True:  # Begin the main loop
                 current_textbox = entity.run_conversation()
                 if current_textbox is None:
                     paused = False
+            if textbox_6.finished:  # If the final conversation with Catherine is over
+                paused = True
 
         if not paused:
             if type(entity) == Enemy:
@@ -110,14 +137,40 @@ while True:  # Begin the main loop
                                 if player.check_jaundice():
                                     current_textbox = Textbox(None, "You drank too much! You have contracted jaundice and will now move more slowly.", 2500, 50)
 
-                        if type(entity) == Enemy and pygame.time.get_ticks() - entity.last_collision >= 1000 and type(e) != Powerup:  # Makes enemies turn around when colliding with other enemies or the player
-                            if entity.facing == "LEFT":
-                                entity.facing = "RIGHT"
-                            elif entity.facing == "RIGHT":
-                                entity.facing = "LEFT"
-                            entity.last_collision = pygame.time.get_ticks()
+                        if type(entity) == Enemy and type(e) != Powerup and type(e) != FriendlyEntity:  # Makes enemies turn around when colliding with other enemies or the player
+                            if type(e) == Player:
+                                if pygame.time.get_ticks() - entity.last_player_collision >= 1000:  # Tracks collision with player separately to reduce weird clipping
+                                    if entity.facing == "LEFT":
+                                        entity.facing = "RIGHT"
+                                    elif entity.facing == "RIGHT":
+                                        entity.facing = "LEFT"
+                                    entity.last_player_collision = pygame.time.get_ticks()
+                            elif pygame.time.get_ticks() - entity.last_collision >= 1000:
+                                if entity.facing == "LEFT":
+                                    entity.facing = "RIGHT"
+                                elif entity.facing == "RIGHT":
+                                    entity.facing = "LEFT"
+                                entity.last_collision = pygame.time.get_ticks()
 
     render_offset = -(player.pos[0] - ((screen_size[0] - player.sprite.get_size()[0]) / 2))  # Pos to offset everything by when rendering, allows camera movement
+
+    if textbox_6.finished:
+        if not ending_cutscene:
+            player.final_pos = copy.deepcopy(player.pos)
+            ending_cutscene = True
+        render_offset = -(player.final_pos[0] - ((screen_size[0] - player.sprite.get_size()[0]) / 2))
+
+    if ending_cutscene:
+        player.pos[1] = (screen_size[1] - get_floor(player.pos, player)[0]) - player.hitbox.height
+        player.pos[0] += 5
+        friendly_entity_2.pos[0] += 5
+        player.animate()
+        friendly_entity_2.animate()
+        if player.pos[0] > player.final_pos[0] + 640:
+            if current_textbox is None:
+                current_textbox = Textbox("Jay Gatsby: ", f"Congratulations on the victory, old sport! Where am I, you ask? It's simple! Though you cannot see me, I am everywhere and everything. At any rate, your score for this round is as follows: {calculate_score(loaded_entities, player)}.", 14000, 28)
+            if current_textbox.finished:
+                sys.exit()
 
     screen.blit(background, (0, 0))
     terrain.set_colorkey((255, 255, 255))
@@ -125,7 +178,7 @@ while True:  # Begin the main loop
 
     for entity in loaded_entities:  # Renders entities to screen
         entity.sprite.set_colorkey((255, 255, 255))  # Keys out white background from all sprites, allowing transparency
-        if type(entity) == Player:
+        if type(entity) == Player and not ending_cutscene:
             if not player.has_moved:
                 if frame_counter % 5 == 0:  # Makes the player sprite blink to indicate invincibility frames
                     screen.blit(entity.sprite, (((screen_size[0] - player.sprite.get_size()[0]) / 2), entity.pos[1]))
