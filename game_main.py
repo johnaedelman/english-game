@@ -43,14 +43,14 @@ powerup6 = Powerup("coffeebeans", powerup_type="COFFEEBEANS", pos=[7900, 0])
 friendly_entity_1 = FriendlyEntity("Rinaldi", pos=[7750, 0], animation=[rinaldi])
 friendly_entity_2 = FriendlyEntity("Catherine", pos=[13400, 0])
 
-textbox_1 = Textbox("Rinaldi: ", "Mama Mia! Frederic, baby! You look like death! It must be a terrible case of the jaundice. Here! Here, my good man! Have some delicious coffee beans, these are sure to get the alcohol out of your liver.", 5000, 30)
+textbox_1 = Textbox("Rinaldi: ", "Mama Mia! Frederic, baby! You look like death! It must be a terrible case of the jaundice. Here! Here, my good man! Have some delicious coffee beans, these are sure to get the alcohol out of your liver.", 6000, 30)
 textbox_2 = Textbox("Henry: ", "Thanks, Rinaldi. I was beginning to fear for my life, with all these Austrians about. I hope all is well with Catherine.", 4000, 30)
 textbox_3 = Textbox("Rinaldi: ", "Oh, I'm sure she's fine. No Austrian could capture old Miss Barkley. Good luck finding her, baby!", 4000, 30)
 friendly_entity_1.conversation = [textbox_1, textbox_2, textbox_3]
 
 textbox_4 = Textbox("Henry: ", "Oh, Catherine! I'm glad you're safe.", 4000, 50)
-textbox_5 = Textbox("Catherine: ", "Henry! It's a joy to see you. I was never very worried about these Austrians, to be truthful. I was only wondering when you would come for me.", 5000, 30)
-textbox_6 = Textbox("Henry: ", "Well, I'm here now, Cat. Shall we go get something to eat? I haven't had anything but alcohol and coffee beans today. It's an injustice. I was born to eat.", 5000, 30)
+textbox_5 = Textbox("Catherine: ", "Henry! It's a joy to see you. I was never very worried about these Austrians, to be truthful. I was only wondering when you would come for me.", 5500, 30)
+textbox_6 = Textbox("Henry: ", "Well, I'm here now, Cat. Shall we go get something to eat? I haven't had anything but grappa and coffee beans today. It's an injustice. I was born to eat.", 6000, 30)
 friendly_entity_2.conversation = [textbox_4, textbox_5, textbox_6]
 
 death_textbox = Textbox(None, "You died! Rinaldi and Catherine will have to bury your skeleton into the earth in a large hole, which they have dug with a shovel.", 5000, 40)
@@ -173,6 +173,7 @@ while True:  # Begin the main loop
                 sys.exit()
 
     screen.blit(background, (0, 0))
+
     terrain.set_colorkey((255, 255, 255))
     screen.blit(terrain, (render_offset - 720, 0))
 
