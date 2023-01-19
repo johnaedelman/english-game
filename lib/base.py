@@ -42,8 +42,10 @@ austrian = pygame.image.load("assets/sprites/austrian.png")
 
 henry = pygame.image.load("assets/sprites/henry.png")
 henry_jump = pygame.image.load("assets/sprites/henry_jump.png")
+henry_run = pygame.image.load("assets/sprites/henry_run.png")
 henry_jaundice = pygame.image.load("assets/sprites/henry_jaundice.png")
 henry_jump_jaundice = pygame.image.load("assets/sprites/henry_jump_jaundice.png")
+henry_run_jaundice = pygame.image.load("assets/sprites/henry_jump_jaundice.png")
 
 crush = pygame.mixer.Sound("assets/sounds/crush.mp3")
 hurt = pygame.mixer.Sound("assets/sounds/hurt.mp3")
@@ -59,19 +61,23 @@ eat.set_volume(0.8)
 
 henry_default_animation = [henry]
 henry_jump_animation = [henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_jump, henry_default_animation]
+henry_run_animation = [henry_run, henry_run, henry_run, henry_run, henry_run, henry_run, henry_run, henry_run, henry_run, henry_run, henry_run, henry_run, henry, henry, henry, henry, henry, henry, henry, henry, henry, henry_default_animation]
 henry_default_animation_jaundice = [henry_jaundice]
 henry_jump_animation_jaundice = [henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_jump_jaundice, henry_default_animation_jaundice]
+henry_run_animation_jaundice = [henry_run_jaundice, henry_run_jaundice, henry_run_jaundice, henry_run_jaundice, henry_run_jaundice, henry_run_jaundice, henry_run_jaundice, henry_run_jaundice, henry_run_jaundice, henry_run_jaundice, henry_run_jaundice, henry_run_jaundice, henry_jaundice, henry_jaundice, henry_jaundice, henry_jaundice, henry_jaundice, henry_jaundice, henry_jaundice, henry_jaundice, henry_jaundice, henry_default_animation_jaundice]
 
 austrian_default_animation = [austrian]
 
 henry_animations = {
     "DEFAULT": henry_default_animation,
-    "JUMP": henry_jump_animation
+    "JUMP": henry_jump_animation,
+    "RUN": henry_run_animation
 }
 
 henry_animations_jaundice = {
     "DEFAULT": henry_default_animation_jaundice,
-    "JUMP": henry_jump_animation_jaundice
+    "JUMP": henry_jump_animation_jaundice,
+    "RUN": henry_run_animation_jaundice
 }
 
 austrian_animations = {
