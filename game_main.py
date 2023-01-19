@@ -7,6 +7,8 @@ import copy
 print("she call me hemingway when i frederic on her henry")
 
 
+
+
 pygame.init()
 pygame.display.set_caption("A Farewell To Arms: The Game")
 pygame.display.set_icon(pygame.image.load("assets/sprites/icon.jpg"))
