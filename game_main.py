@@ -39,7 +39,7 @@ powerup5 = Powerup("alcohol5", powerup_type="ALCOHOL", pos=[11650, 0])
 powerup6 = Powerup("coffeebeans", powerup_type="COFFEEBEANS", pos=[7900, 0])
 
 friendly_entity_1 = FriendlyEntity("Rinaldi", pos=[7750, 0], animation=[rinaldi])
-friendly_entity_2 = FriendlyEntity("Catherine", pos=[13400, 0])
+friendly_entity_2 = FriendlyEntity("Catherine", pos=[13400, 0], animation=catherine_animations["DEFAULT"], animations=catherine_animations)
 
 textbox_1 = Textbox("Rinaldi: ", "Mama Mia! Frederic, baby! You look like death! It must be a terrible case of the jaundice. Here! Here, my good man! Have some delicious coffee beans, these are sure to get the alcohol out of your liver.", 6000, 30)
 textbox_2 = Textbox("Henry: ", "Thanks, Rinaldi. I was beginning to fear for my life, with all these Austrians about. I hope all is well with Catherine.", 4000, 30)
@@ -171,6 +171,7 @@ while True:  # Begin the main loop
         player.facing = "RIGHT"
         friendly_entity_2.facing = "RIGHT"
         player.animation = player.animations["RUN"]
+        friendly_entity_2.animation = friendly_entity_2.animations["RUN"]
         player.animate()
         friendly_entity_2.animate()
         if player.pos[0] > player.final_pos[0] + 640:
