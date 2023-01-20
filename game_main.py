@@ -4,8 +4,6 @@ from lib.gui import *
 import sys
 from copy import deepcopy
 
-
-
 pygame.init()
 pygame.display.set_caption("A Farewell To Arms: The Game")
 pygame.display.set_icon(pygame.image.load("assets/sprites/icon.jpg"))
