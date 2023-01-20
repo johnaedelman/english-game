@@ -38,6 +38,8 @@ alcohol = pygame.image.load("assets/sprites/alcohol.png")
 coffeebeans = pygame.image.load("assets/sprites/coffeebeans.png")
 
 rinaldi = pygame.image.load("assets/sprites/rizz_breen.png")
+catherine = pygame.image.load("assets/sprites/catherine.png")
+catherine_run = pygame.image.load("assets/sprites/catherine_run.png")
 austrian = pygame.image.load("assets/sprites/austrian.png")
 
 henry = pygame.image.load("assets/sprites/henry.png")
@@ -68,6 +70,9 @@ henry_run_animation_jaundice = [henry_run_jaundice, henry_run_jaundice, henry_ru
 
 austrian_default_animation = [austrian]
 
+catherine_default_animation = [catherine]
+catherine_run_animation = [catherine_run, catherine_run, catherine_run, catherine_run, catherine_run, catherine_run, catherine_run, catherine_run, catherine_run, catherine_run, catherine_run, catherine_run, catherine, catherine, catherine, catherine, catherine, catherine, catherine, catherine, catherine, catherine_default_animation]
+
 henry_animations = {
     "DEFAULT": henry_default_animation,
     "JUMP": henry_jump_animation,
@@ -82,4 +87,9 @@ henry_animations_jaundice = {
 
 austrian_animations = {
     "DEFAULT": austrian_default_animation
+}
+
+catherine_animations = {
+    "DEFAULT": catherine_default_animation,
+    "RUN": catherine_run_animation
 }
